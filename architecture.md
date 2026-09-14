@@ -7,7 +7,6 @@ This repository implements an automated, end-to-end hybrid infrastructure and ro
 
 ## 2. High-Level Architecture Diagram
 
-text
 +-----------------------------------------------------------------------+
 |                         GitHub Actions CI/CD                          |
 |  - Automated Validation (Terraform Init/Validate, Ansible Syntax Check) |
@@ -33,6 +32,8 @@ v
 |  - FRR Router 1 (OSPF)          |
 |  - FRR Router 2 (BGP)           |
 +---------------------------------+
+
+\```
 
 
 ---
