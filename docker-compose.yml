@@ -1,0 +1,27 @@
+version: '3.8'
+
+networks:
+  wan_link:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.100.0/24
+
+services:
+  router1:
+    image: frrouting/frr:latest
+    container_name: enterprise-router-1
+    networks:
+      wan_link:
+        ipv4_address: 192.168.100.2
+    privileged: true
+    restart: unless-stopped
+
+  router2:
+    image: frrouting/frr:latest
+    container_name: enterprise-router-2
+    networks:
+      wan_link:
+        ipv4_address: 192.168.100.3
+    privileged: true
+    restart: unless-stopped

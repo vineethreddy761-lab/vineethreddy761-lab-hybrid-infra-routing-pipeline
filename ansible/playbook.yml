@@ -1,0 +1,29 @@
+---
+- hosts: local
+  connection: local
+  tasks:
+    - name: Deploy Enterprise Router 1
+      community.docker.docker_container:
+        name: enterprise-router-1
+        image: frrouting/frr:latest
+        state: started
+        recreate: yes
+        restart_policy: always
+        privileged: yes
+        security_opts:
+          - label:disable
+        volumes:
+          - "{{ playbook_dir }}/router1-config:/etc/frr"
+
+    - name: Deploy Enterprise Router 2
+      community.docker.docker_container:
+        name: enterprise-router-2
+        image: frrouting/frr:latest
+        state: started
+        recreate: yes
+        restart_policy: always
+        privileged: yes
+        security_opts:
+          - label:disable
+        volumes:
+          - "{{ playbook_dir }}/router2-config:/etc/frr"
