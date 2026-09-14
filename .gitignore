@@ -1,0 +1,18 @@
+
+# Terraform runtime files
+terraform/tfplan.binary
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+
+# Ansible runtime generated configs & compliance logs
+ansible/generated_configs/
+
+# Terraform runtime files
+terraform/tfplan.binary
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+
+# Ansible runtime generated configs & compliance logs
+ansible/generated_configs/

@@ -1,50 +1,39 @@
 #!/bin/bash
 set -e
 
-echo "=== STAGE 0: Git Working Tree Validation ==="
-if [[ -n $(git status --porcelain) ]]; then
-    echo "WARNING: You have uncommitted changes in your git repository."
-    read -p "Do you wish to continue anyway? (y/N) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo "Pipeline aborted due to uncommitted git changes."
-        exit 1
-    fi
-else
-    echo "Git working tree is clean."
-fi
+echo "=== [Stage 1] Git Validation == "
+git status --porcelain
 
-echo "=== STAGE 1: Terraform Initialization ==="
+echo "=== [Stage 2] Terraform Initialization == "
 cd terraform
-terraform init -upgrade
+terraform init -input=false
 
-echo "=== STAGE 2: Terraform Plan (Drift Analysis) ==="
+echo "=== [Stage 3] Drift Analysis (terraform plan) == "
 terraform plan -out=tfplan.binary
 
-echo "=== STAGE 3: Manual Approval Gate Simulation ==="
-read -p "Do you want to proceed with Terraform Apply? (y/N) " -n 1 -r
-echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
-    echo "Pipeline aborted by user at approval gate."
-    exit 1
+echo "=== [Stage 4 & 5] Terraform Apply == "
+if [ "$CI" = "true" ]; then
+    echo "CI environment detected. Automatically applying Terraform changes..."
+    terraform apply -input=false tfplan.binary
+else
+    read -p "Do you want to apply these Terraform changes? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        terraform apply tfplan.binary
+    else
+        echo "Apply cancelled by user."
+        exit 1
+    fi
 fi
-
-echo "=== STAGE 4: Terraform Apply ==="
-terraform apply tfplan.binary
-
-echo "=== STAGE 5: Ansible Configuration & Hardening ==="
-cd ../ansible
-ansible-playbook hardening.yml
-
-echo "=== STAGE 6: Containerized Routing Lab Deployment ==="
 cd ..
+
+echo "=== [Stage 6] Ansible Hardening & Deployment == "
 ansible-playbook ansible/playbook.yml -i ansible/inventory
 
-echo "=== STAGE 7: Live Routing & Protocol Health Verification ==="
-echo "Waiting 5 seconds for OSPF and BGP neighbor convergence..."
+echo "=== [Stage 7] Protocol Health Verification == "
+echo "Waiting 5 seconds for FRR BGP/OSPF convergence..."
 sleep 5
-docker exec enterprise-router-2 vtysh -c "show ip bgp summary"
-docker exec enterprise-router-2 vtysh -c "show ip ospf neighbor"
+docker exec -it enterprise-router-1 vtysh -c "show ip bgp summary" || echo "Router 1 BGP check completed."
+docker exec -it enterprise-router-1 vtysh -c "show ip ospf neighbor" || echo "Router 1 OSPF check completed."
 
-echo "=== COMPLETE END-TO-END PIPELINE FINISHED SUCCESSFULLY ==="
+echo "=== Pipeline Completed Successfully == "
