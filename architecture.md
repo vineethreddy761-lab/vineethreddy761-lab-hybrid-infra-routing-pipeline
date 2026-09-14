@@ -7,34 +7,33 @@ This repository implements an automated, end-to-end hybrid infrastructure and ro
 
 ## 2. High-Level Architecture Diagram
 
+```text
 +-----------------------------------------------------------------------+
 |                         GitHub Actions CI/CD                          |
 |  - Automated Validation (Terraform Init/Validate, Ansible Syntax Check) |
 |  - Orchestrated Execution via run_pipeline.sh                        |
 +-----------------------------------------------------------------------+
-|
-v
+                                   |
+                                   v
 +-----------------------------------------------------------------------+
 |                         Orchestration Pipeline                        |
 |                   (run_pipeline.sh / Local & CI Execution)            |
 +-----------------------------------------------------------------------+
-|                                 |
-v                                 v
+                   |                                 |
+                   v                                 v
 +---------------------------------+   +---------------------------------+
 |        Terraform Engine         |   |         Ansible Engine          |
 |  - State Management             |   |  - System Hardening             |
 |  - Resource Provision           |   |  - Compliance Audits            |
 +---------------------------------+   +---------------------------------+
-|
-v
-+---------------------------------+
-|       Docker Compose Lab        |
-|  - FRR Router 1 (OSPF)          |
-|  - FRR Router 2 (BGP)           |
-+---------------------------------+
-
-\```
-
+                                                     |
+                                                     v
+                                      +---------------------------------+
+                                      |       Docker Compose Lab        |
+                                      |  - FRR Router 1 (OSPF)          |
+                                      |  - FRR Router 2 (BGP)           |
+                                      +---------------------------------+
+```
 
 ---
 
