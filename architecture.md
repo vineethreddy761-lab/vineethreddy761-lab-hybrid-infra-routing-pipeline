@@ -1,4 +1,3 @@
-
 # Hybrid Infrastructure & Routing Lab - Architecture & Design
 
 ## 1. Overview
@@ -8,6 +7,7 @@ This repository implements an automated, end-to-end hybrid infrastructure and ro
 
 ## 2. High-Level Architecture Diagram
 
+text
 +-----------------------------------------------------------------------+
 |                         GitHub Actions CI/CD                          |
 |  - Automated Validation (Terraform Init/Validate, Ansible Syntax Check) |
@@ -19,20 +19,20 @@ v
 |                         Orchestration Pipeline                        |
 |                   (run_pipeline.sh / Local & CI Execution)            |
 +-----------------------------------------------------------------------+
-|                                       |
-v                                       v
-+-----------------------+             +-----------------------+
-|  Terraform Engine     |             |   Ansible Engine      |
-|  - State Management   |             |   - System Hardening  |
-|  - Resource Provision |             |   - Compliance Audits |
-+-----------------------+             +-----------------------+
+|                                 |
+v                                 v
++---------------------------------+   +---------------------------------+
+|        Terraform Engine         |   |         Ansible Engine          |
+|  - State Management             |   |  - System Hardening             |
+|  - Resource Provision           |   |  - Compliance Audits            |
++---------------------------------+   +---------------------------------+
 |
 v
-+-----------------------+
-| Docker Compose Lab    |
-|  - FRR Router 1 (OSPF)|
-|  - FRR Router 2 (BGP) |
-+-----------------------+
++---------------------------------+
+|       Docker Compose Lab        |
+|  - FRR Router 1 (OSPF)          |
+|  - FRR Router 2 (BGP)           |
++---------------------------------+
 
 
 ---
@@ -64,4 +64,3 @@ v
 2. **Stage 3 & 4:** Terraform plan generation and automated/interactive apply.
 3. **Stage 5 & 6:** Ansible playbook execution for system hardening and compliance logging.
 4. **Stage 7:** Docker Compose deployment of FRR routers and protocol convergence validation (`vtysh`).
-
